@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include "Tabla.h"
+#include "Registro.h"
 
 using namespace std;
 
@@ -17,9 +18,10 @@ public:
     /*
      * @generador
      */
-    BaseDatos agregar_tabla();
+    map<string,Tabla> agregar_tabla(string nombre_tabla, Tabla tabla);
 
-    Tabla agregar_registro();
+    Tabla agregar_registro(string nombre_tabla, Registro r);
+
     //Depende de las restricciones especificadas
     /*
      * TODO RESTRICCIONES
@@ -34,6 +36,7 @@ public:
 
     void show_base_datos();
 
+    Tabla devoler_tabla(string nombre_tabla);
 
 
 

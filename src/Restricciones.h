@@ -1,8 +1,9 @@
-#ifndef TP1_CRITERIOS_H
-#define TP1_CRITERIOS_H
+#ifndef RESTRICCIONES_H
+#define RESTRICCIONES_H
 
 #include <vector>
 #include <map>
+#include "Dato.h"
 
 
 using namespace std;
@@ -13,17 +14,19 @@ public:
     /*
     * @generador
     */
-    Restricciones(vector<string> campo_y_valor, bool filtro);
-    /*
-    * @generador
-    */
-    pair<vector<string>, bool> crear_restriccion (vector<string> campo_y_valor, bool filtro);
+    Restricciones(string campo, Dato valor, bool filtro);
+
 
 private:
 
-    pair<vector<string>,bool> restricciones;
+    string _campo;
+    Dato _valor;
+    bool _filtro;
 
 };
 
+bool operator==(const Restricciones&, const Restricciones&);
+
+bool operator!=(const Restricciones&, const Restricciones&);
 
 #endif

@@ -53,3 +53,8 @@ Tabla BaseDatos::busqueda(Tabla tabla, vector<Restricciones> criterios) {
         //devolver tabla vacia
     }
 };
+
+bool BaseDatos::hay_repetidos(Tabla tabla, Registro registro){
+
+
+}

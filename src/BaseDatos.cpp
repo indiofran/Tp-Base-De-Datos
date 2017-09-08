@@ -46,7 +46,7 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
     }
 }
 
-Tabla BaseDatos::busqueda(Tabla tabla, vector<Restricciones> criterios) {
+Tabla BaseDatos::busqueda(Tabla tabla, Criterios criterios) {
     if(true){//es criterio valido ejecuta la funcion
 
     }else{

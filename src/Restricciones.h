@@ -1,22 +1,32 @@
-
-
-
-#ifndef TP1_CRITERIOS_H
-#define TP1_CRITERIOS_H
+#ifndef RESTRICCIONES_H
+#define RESTRICCIONES_H
 
 #include <vector>
 #include <map>
+#include "Dato.h"
+
+
 using namespace std;
 
 class Restricciones {
+
 public:
-    Restricciones();
+    /*
+    * @generador
+    */
+    Restricciones(string campo, Dato valor, bool filtro);
 
-    vector<Restricciones> criterios();
 
-    map criterio();
+private:
+
+    string _campo;
+    Dato _valor;
+    bool _filtro;
 
 };
 
+bool operator==(const Restricciones&, const Restricciones&);
 
-#endif //TP1_CRITERIOS_H
+bool operator!=(const Restricciones&, const Restricciones&);
+
+#endif

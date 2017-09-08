@@ -36,10 +36,10 @@ TEST_F(BasedatosTests, nueva){
     vector <Tabla> tablas(array_tablas,array_tablas + sizeof(array_tablas) / sizeof(Tabla));
     BaseDatos universidad(tablas_nombre,tablas);
     universidad.agregar_tabla("carreras", carreras);
-    EXPECT_EQ(universidad.base().at("carreras"),carreras);
-//    Registro nuevo_registro({"Nombre", "LU"}, {datoStr("March"), datoStr("64/9")});
-//    universidad.agregar_registro("Alumnos",nuevo_registro);
-//    EXPECT_NE(universidad.devoler_tabla("Alumnos"),alumnos);
+    Registro nuevo_registro({"Nombre", "LU"}, {datoStr("March"), datoStr("64/9")});
+    alumnos.agregarRegistro(nuevo_registro);
+    universidad.agregar_registro("Alumnos",nuevo_registro);
+    EXPECT_EQ(universidad.devoler_tabla("Alumnos"),alumnos);
 }
 //TEST_F(BasedatosTests, Argregar_registro){
 //    string tabla_nombres[] = {"Alumnos"};

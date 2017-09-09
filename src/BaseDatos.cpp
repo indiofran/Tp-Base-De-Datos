@@ -50,12 +50,12 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
 
 Tabla BaseDatos::busqueda(string nombre_tabla, Criterios criterios) {
     map<string, Tabla> base_datos = this->base_de_datos;
-    if((base_datos.find(nombre_tabla) != base_datos.end()) && this->criterio_valido(criterios)){
+    if((base_datos.find(nombre_tabla) != base_datos.end()) && this->criterio_valido(nombre_tabla,criterios)){
         Tabla tabla_busqueda = base_datos.at(nombre_tabla);
         vector<string> campos_tabla = tabla_busqueda.campos();
         vector<Registro> resultado_busqueda = tabla_busqueda.registros();
         for (int i = 0; i < criterios.size(); ++i) {
-             Restricciones restriccion = criterios[i];
+            Restricciones restriccion = criterios[i];
             for (int k = 0; k < resultado_busqueda.size(); ++k) {
                 Registro registro = resultado_busqueda[k];
                 if (registro.dato(restriccion.get_campo()) == restriccion.get_valor() ){
@@ -70,7 +70,7 @@ Tabla BaseDatos::busqueda(string nombre_tabla, Criterios criterios) {
         Tabla resultado(campos_tabla,tabla_busqueda.claves(),tipos);
         return  resultado;
     }else{
-        return Tabla({},{},{});//Tabla Vacia
+        return Tabla({},{},{});
     }
 };
 

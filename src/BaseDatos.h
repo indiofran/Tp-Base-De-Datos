@@ -43,7 +43,7 @@ public:
 
     bool hay_registro_repetidos(Tabla tabla, Registro registro);
 
-    bool criterio_valido(Criterios criterios);
+    bool criterio_valido(string nombre_tabla, Criterios criterios);
 
 
 private:

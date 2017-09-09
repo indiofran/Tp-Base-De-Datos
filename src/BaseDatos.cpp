@@ -79,10 +79,9 @@ bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
 
 }
 
-bool BaseDatos::criterio_valido(Criterios criterios){
+bool BaseDatos::criterio_valido(string nombre_tabla, Criterios criterios){
     map<string, Tabla> db = this->base_de_datos;
     bool res = true;
-    string nombre_tabla;
     Tabla tabla_a_comparar = db.at(nombre_tabla);
     for(int i = 0;(i < criterios.size()) && (res= true);i++){
         for(int j = 0; j < tabla_a_comparar.campos().size(); j++) {

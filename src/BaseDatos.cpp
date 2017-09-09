@@ -80,5 +80,21 @@ bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
 }
 
 bool BaseDatos::criterio_valido(Criterios criterios){
-
+    map<string, Tabla> db = this->base_de_datos;
+    bool res = true;
+    string nombre_tabla;
+    Tabla tabla_a_comparar = db.at(nombre_tabla);
+    for(int i = 0;(i < criterios.size()) && (res= true);i++){
+        for(int j = 0; j < tabla_a_comparar.campos().size(); j++) {
+            if (criterios[i].get_campo() == tabla_a_comparar.campos()[j] && criterios[i].get_valor() == tabla_a_comparar.tipoCampo(criterios[i].get_campo())){
+                j = tabla_a_comparar.campos().size();
+                res = true;
+            } else {
+                res = false;
+                j++;
+            }
+        }
+        i++;
+    }
+    return res;
 };

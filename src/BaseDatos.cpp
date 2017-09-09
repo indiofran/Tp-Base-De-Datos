@@ -50,7 +50,7 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
 
 Tabla BaseDatos::busqueda(string nombre_tabla, Criterios criterios) {
     map<string, Tabla> base_datos = this->base_de_datos;
-    if((base_datos.find(nombre_tabla) != base_datos.end()) && this->criterio_valido(nombre_tabla,criterios)){
+    if((base_datos.find(nombre_tabla) != base_datos.end()) && this->criterios_valido(nombre_tabla, criterios)){
         Tabla tabla_busqueda = base_datos.at(nombre_tabla);
         vector<string> campos_tabla = tabla_busqueda.campos();
         vector<Registro> resultado_busqueda = tabla_busqueda.registros();
@@ -75,25 +75,31 @@ Tabla BaseDatos::busqueda(string nombre_tabla, Criterios criterios) {
 };
 
 bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
-
-
+    vector<string> claves = tabla.claves();
+    for (int i = 0; i < claves.size(); ++i) {
+            string clave = claves[i];
+        vector<Registro> registros = tabla.registros();
+        for (int j = 0; j < registros.size(); ++j) {
+            if(registros[j].dato(clave) == registro.dato(clave)){
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
-bool BaseDatos::criterio_valido(string nombre_tabla, Criterios criterios){
+bool BaseDatos::criterios_valido(string nombre_tabla, Criterios criterios){
     map<string, Tabla> db = this->base_de_datos;
     bool res = true;
     Tabla tabla_a_comparar = db.at(nombre_tabla);
-    for(int i = 0;(i < criterios.size()) && (res= true);i++){
-        for(int j = 0; j < tabla_a_comparar.campos().size(); j++) {
+    for(int i = 0;(i < criterios.size()) && res;i++){
+        res = false;
+        for(int j = 0; (j < tabla_a_comparar.campos().size()) && !res; j++) {
             if (criterios[i].get_campo() == tabla_a_comparar.campos()[j] && criterios[i].get_valor() == tabla_a_comparar.tipoCampo(criterios[i].get_campo())){
-                j = tabla_a_comparar.campos().size();
                 res = true;
-            } else {
-                res = false;
-                j++;
             }
         }
-        i++;
+
     }
     return res;
 };

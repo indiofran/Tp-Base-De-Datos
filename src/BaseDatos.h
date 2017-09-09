@@ -41,7 +41,7 @@ public:
 
     Tabla devoler_tabla(string nombre_tabla);
 
-    bool hay_repetidos(Tabla tabla, Registro registro);
+    bool hay_registro_repetidos(Tabla tabla, Registro registro);
 
     bool criterio_valido(Criterios criterios);
 

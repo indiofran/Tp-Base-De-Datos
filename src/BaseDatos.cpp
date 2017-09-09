@@ -1,5 +1,7 @@
 #include "BaseDatos.h"
 
+
+
 using namespace std;
 
 BaseDatos::BaseDatos(vector<string> nombre_tablas, vector<Tabla> tablas) : _tablas(tablas) {
@@ -37,7 +39,7 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
         for (int i = 0; i < campos.size(); ++i) {
             string campo_seleccionado = campos[i];
             if (!(((r.dato(campo_seleccionado).esNat() && r.dato(campo_seleccionado).valorNat())) ||
-                    (r.dato(campo_seleccionado).esString() && (r.dato(campo_seleccionado).valorStr() != "")))) {
+                  (r.dato(campo_seleccionado).esString() && (r.dato(campo_seleccionado).valorStr() != "")))) {
                 return false;
             }
         }
@@ -46,15 +48,21 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
     }
 }
 
-Tabla BaseDatos::busqueda(Tabla tabla, Criterios criterios) {
-    if(true){//es criterio valido ejecuta la funcion
-
+Tabla BaseDatos::busqueda(string nombre_tabla, Criterios criterios) {
+    map db = this->base_de_datos;
+    if((db.find(nombre_tabla) == db.end()) && this->criterio_valido(criterios)){
+        Tabla tabla_busqueda = db.at(nombre_tabla);
+        vector<string> campos_tabla = tabla_busqueda.campos();
     }else{
-        //devolver tabla vacia
+        return Tabla({},{},{});//Tabla Vacia
     }
 };
 
-bool BaseDatos::hay_repetidos(Tabla tabla, Registro registro){
+bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
 
 
 }
+
+bool BaseDatos::criterio_valido(Criterios criterios){
+
+};

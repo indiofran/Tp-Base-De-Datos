@@ -8,7 +8,7 @@
 #include "Restricciones.h"
 
 using namespace std;
-
+typedef vector<Restricciones> Criterios;
 class BaseDatos {
 
 public:
@@ -30,7 +30,7 @@ public:
      */
     bool puedo_agregar_registro(string name_table, Registro r);
 
-    Tabla busqueda(Tabla tabla, vector<Restricciones> criterios);
+    Tabla busqueda(string nombre_tabla, Criterios criterios);
 
     /*
      * @observador
@@ -43,10 +43,13 @@ public:
 
     bool hay_repetidos(Tabla tabla, Registro registro);
 
+    bool criterio_valido(Criterios criterios);
+
 
 private:
 
-    vector<vector<Restricciones>> criterios_utilizados;
+
+    vector<Criterios> criterios_utilizados;
     vector<Tabla> _tablas;
     map<string, Tabla> base_de_datos;
 

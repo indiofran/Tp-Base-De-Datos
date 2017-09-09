@@ -16,6 +16,13 @@ public:
     */
     Restricciones(string campo, Dato valor, bool filtro);
 
+    string get_campo() const;
+
+    Dato get_valor() const;
+
+    bool get_filtro() const;
+
+
 
 private:
 

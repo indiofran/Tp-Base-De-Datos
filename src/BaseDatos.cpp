@@ -45,7 +45,7 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
         Tabla tabla_a_agregar = this->devoler_tabla(name_table);
         if(r.campos() == tabla_a_agregar.campos()){
             for (int i = 0; i < r.campos().size() ; ++i) {
-                if(r.dato(r.campos()[i]).esString() !=  tabla_a_agregar.tipoCampo(r.campos()[i]).esString()){
+                if(r.dato(r.campos()[i]).esString() !=  tabla_a_agregar.tipoCampo(r.campos()[i]).esString() || this->hay_registro_repetidos(tabla_a_agregar, r)){
                     return false;
                 }
             }
@@ -59,30 +59,53 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
 
 Tabla BaseDatos::busqueda(string nombre_tabla, Criterio criterio) {
     map<string, Tabla> base_datos = this->base_de_datos;
+    Tabla tabla_busqueda = base_datos.at(nombre_tabla);
+    vector<string> campos_tabla = tabla_busqueda.campos();
+    vector<Registro> resultado_busqueda = tabla_busqueda.registros();
     if((base_datos.find(nombre_tabla) != base_datos.end()) && this->criterio_valido(nombre_tabla, criterio)){
-        agregar_criterio_utilizado(criterio);
-        Tabla tabla_busqueda = base_datos.at(nombre_tabla);
-        vector<string> campos_tabla = tabla_busqueda.campos();
-        vector<Registro> resultado_busqueda = tabla_busqueda.registros();
+       agregar_criterio_utilizado(criterio);
         for (int i = 0; i < criterio.size(); ++i) {
             Restricciones restriccion = criterio[i];
-            for (int k = 0; k < resultado_busqueda.size(); ++k) {
-                Registro registro = resultado_busqueda[k];
-                if (registro.dato(restriccion.get_campo()) == restriccion.get_valor() ){
-                    resultado_busqueda.push_back(registro);
-                }
+            if(restriccion.get_filtro()){
+                resultado_busqueda = this->filtrar_resgitros_que_tiene(resultado_busqueda,restriccion);
+            }else{
+                resultado_busqueda = this->filtrar_resgitros_que_no_tiene(resultado_busqueda,restriccion);
             }
         }
-        vector<Dato> tipos;
-        for (int j = 0; j < campos_tabla.size() ; ++j) {
-            tipos.push_back(tabla_busqueda.tipoCampo(campos_tabla[j]));
-        }
-        Tabla resultado(campos_tabla,tabla_busqueda.claves(),tipos);
-        return  resultado;
-    }else{
-        return Tabla({},{},{});
     }
+    vector<Dato> tipos;
+    for (int j = 0; j < campos_tabla.size() ; ++j) {
+        tipos.push_back(tabla_busqueda.tipoCampo(campos_tabla[j]));
+    }
+    Tabla resultado(campos_tabla,tabla_busqueda.claves(),tipos);
+    for (int l = 0; l <resultado_busqueda.size() ; ++l) {
+        resultado.agregarRegistro(resultado_busqueda[l]);
+    }
+    return  resultado;
 };
+
+vector <Registro> BaseDatos::filtrar_resgitros_que_tiene(vector<Registro> registros_donde_buscar, Restricciones restriccion){
+    vector <Registro> resultado_busqueda;
+    for (int k = 0; k < registros_donde_buscar.size(); ++k) {
+        Registro registro = registros_donde_buscar[k];
+        if (registro.dato(restriccion.get_campo()) == restriccion.get_valor() ){
+            resultado_busqueda.push_back(registro);
+        }
+    }
+    return resultado_busqueda;
+}
+vector <Registro> BaseDatos::filtrar_resgitros_que_no_tiene(vector<Registro> registros_donde_buscar, Restricciones restriccion){
+    vector <Registro> resultado_busqueda;
+    for (int k = 0; k < registros_donde_buscar.size(); ++k) {
+        Registro registro = registros_donde_buscar[k];
+        if (registro.dato(restriccion.get_campo()) != restriccion.get_valor() ){
+            resultado_busqueda.push_back(registro);
+        }
+    }
+    return resultado_busqueda;
+}
+
+
 
 bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
     vector<string> claves = tabla.claves();
@@ -91,11 +114,11 @@ bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
         vector<Registro> registros = tabla.registros();
         for (int j = 0; j < registros.size(); ++j) {
             if(registros[j].dato(clave) == registro.dato(clave)){
-                return false;
+                return true;
             }
         }
     }
-    return true;
+    return false;
 }
 
 bool BaseDatos::criterio_valido(string nombre_tabla, Criterio criterio){
@@ -118,10 +141,9 @@ bool BaseDatos::criterio_valido(string nombre_tabla, Criterio criterio){
 void BaseDatos::agregar_criterio_utilizado(Criterio criterio){
     pair<bool,int> existe_criterio_pos = this->tiene_criterio(criterio);
     if(existe_criterio_pos.first){
-        pair<Criterio,int>* criterio_a_sumar = &this->criterios_utilizados[existe_criterio_pos.second];
-        criterio_a_sumar->second++;
+        this->criterios_utilizados[existe_criterio_pos.second].second++;
     }else{
-        this->criterios_utilizados.push_back(make_pair(criterio,1));
+        this->criterios_utilizados.emplace_back(make_pair(criterio,1));
     }
 }
 pair <bool,int> BaseDatos::tiene_criterio(Criterio criterio){
@@ -131,18 +153,18 @@ pair <bool,int> BaseDatos::tiene_criterio(Criterio criterio){
             return make_pair(true, i);
         }
     }
-    return make_pair(true, -1);
+    return make_pair(false, -1);
 }
 
-Criterio BaseDatos::criterio_mas_utilizado(){
+int BaseDatos::criterio_mas_utilizado(){
     vector<pair<Criterio,int>> criterios_utilizados = this->criterios_utilizados;
-    pair<Criterio, int> cantidad_mas_utilizada;
+    pair<Criterio, int> criterio_mas_utilizado;
     for (int i = 0; i < criterios_utilizados.size() ; ++i) {
-        if(criterios_utilizados[i].second > cantidad_mas_utilizada.second){
-            cantidad_mas_utilizada = criterios_utilizados[i];
+        if(criterios_utilizados[i].second > criterio_mas_utilizado.second){
+            criterio_mas_utilizado = criterios_utilizados[i];
         }
     }
-    return cantidad_mas_utilizada.first;
+    return criterio_mas_utilizado.second;
 };
 
 

@@ -16,7 +16,9 @@ public:
      * @generador
      */
     BaseDatos(vector<string> nombre_tablas, vector<Tabla> tabla);
+
     BaseDatos();
+
     /*
      * @generador
      */
@@ -24,10 +26,12 @@ public:
 
     void agregar_registro(string nombre_tabla, Registro r);
 
-    //Depende de las restricciones especificadas
     /*
-     * TODO RESTRICCIONES
+     * TODO buscar:
+     * que no se sume dos veces
+     * ver el true y el false
      */
+
     bool puedo_agregar_registro(string name_table, Registro r);
 
     Tabla busqueda(string nombre_tabla, Criterio criterio);
@@ -37,19 +41,17 @@ public:
      */
     map<string, Tabla> base() const;
 
-    void show_base_datos();
 
     Tabla devoler_tabla(string nombre_tabla);
 
-    bool hay_registro_repetidos(Tabla tabla, Registro registro);
 
     bool criterio_valido(string nombre_tabla, Criterio criterio);
 
-    Criterio criterio_mas_utilizado();
+    int criterio_mas_utilizado();
 
-    void agregar_criterio_utilizado(Criterio criterio);
 
-    pair <bool,int> tiene_criterio(Criterio criterio);
+
+
 
 
 
@@ -62,7 +64,14 @@ private:
     vector<Tabla> _tablas;
     map<string, Tabla> base_de_datos;
 
+    vector<Registro> filtrar_resgitros_que_tiene(vector<Registro> registros_donde_buscar, Restricciones restriccion);
+    vector<Registro> filtrar_resgitros_que_no_tiene(vector<Registro> registros_donde_buscar, Restricciones restriccion);
 
+    pair<bool, int> tiene_criterio(Criterio criterio);
+
+    void agregar_criterio_utilizado(Criterio criterio);
+
+    bool hay_registro_repetidos(Tabla tabla, Registro registro);
 };
 
 

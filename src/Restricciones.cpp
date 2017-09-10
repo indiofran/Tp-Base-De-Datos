@@ -19,12 +19,10 @@ bool Restricciones::get_filtro() const{
 bool operator==(const Restricciones& r1, const Restricciones& r2){
     if (r2.get_campo() != r1.get_campo()) {
         return false;
+    }else if (r1.get_valor() != r2.get_valor()) {
+        return false;
     }else{
-        if (r1.get_valor() != r2.get_valor()) {
-            return false;
-        }else{
             return r1.get_filtro() == r2.get_filtro();
-        }
     }
 }
 

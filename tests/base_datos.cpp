@@ -152,3 +152,20 @@ TEST_F(BasedatosTests, Busqueda){
     universidad.busqueda("Alumnos", nada);
     EXPECT_EQ(universidad.criterio_mas_utilizado(), nada);
 }
+
+TEST_F(BasedatosTests, BasesIguales){
+    BaseDatos base1;
+    BaseDatos base2;
+    base1.agregar_tabla("Alumnos",alumnos);
+    base2.agregar_tabla("Alumnos",alumnos);
+    EXPECT_TRUE(base1==base2);
+}
+
+TEST_F(BasedatosTests, BasesDistintas){
+    BaseDatos base1;
+    BaseDatos base2;
+    base1.agregar_tabla("Alumnos",alumnos);
+    base2.agregar_tabla("Carreras",carreras);
+    EXPECT_FALSE(base1==base2);
+}
+

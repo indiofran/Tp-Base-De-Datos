@@ -49,7 +49,7 @@ public:
 
     Criterio criterio_mas_utilizado();
 
-
+    vector<pair<Criterio, int>> get_criterios_utilizados() const;
 
 
 
@@ -73,6 +73,8 @@ private:
 
     bool hay_registro_repetidos(Tabla tabla, Registro registro);
 };
+
+bool operator==(const BaseDatos&, const BaseDatos&);
 
 
 #endif

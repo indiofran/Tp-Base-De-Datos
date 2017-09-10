@@ -30,7 +30,7 @@ public:
      */
     bool puedo_agregar_registro(string name_table, Registro r);
 
-    Tabla busqueda(string nombre_tabla, Criterio criterios);
+    Tabla busqueda(string nombre_tabla, Criterio criterio);
 
     /*
      * @observador

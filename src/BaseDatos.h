@@ -8,7 +8,7 @@
 #include "Restricciones.h"
 
 using namespace std;
-typedef vector<Restricciones> Criterios;
+typedef vector<Restricciones> Criterio;
 class BaseDatos {
 
 public:
@@ -30,7 +30,7 @@ public:
      */
     bool puedo_agregar_registro(string name_table, Registro r);
 
-    Tabla busqueda(string nombre_tabla, Criterios criterios);
+    Tabla busqueda(string nombre_tabla, Criterio criterios);
 
     /*
      * @observador
@@ -43,17 +43,25 @@ public:
 
     bool hay_registro_repetidos(Tabla tabla, Registro registro);
 
-    bool criterios_valido(string nombre_tabla, Criterios criterios);
+    bool criterio_valido(string nombre_tabla, Criterio criterio);
 
+    Criterio criterio_mas_utilizado();
+
+    void agregar_criterio_utilizado(Criterio criterio);
+
+    pair <bool,int> tiene_criterio(Criterio criterio);
+
+
+
+    // bool operator==(const BaseDatos&, const BaseDatos&);
 
 private:
 
 
-    vector<Criterios> criterios_utilizados;
+    vector<pair<Criterio, int>> criterios_utilizados;
     vector<Tabla> _tablas;
     map<string, Tabla> base_de_datos;
 
-    //friend bool operator==();
 
 };
 

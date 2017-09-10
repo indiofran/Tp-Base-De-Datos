@@ -4,6 +4,8 @@
 
 using namespace std;
 
+BaseDatos::BaseDatos() {}
+
 BaseDatos::BaseDatos(vector<string> nombre_tablas, vector<Tabla> tablas) : _tablas(tablas) {
     for (int i = 0; i < tablas.size(); i++) {
         this->base_de_datos.insert(make_pair(nombre_tablas[i], tablas[i]));
@@ -27,7 +29,11 @@ void BaseDatos::agregar_registro(string nombre_tabla, Registro r) {
 }
 
 Tabla BaseDatos::devoler_tabla(string nombre_tabla) {
-    return this->base().at(nombre_tabla);
+    if(this->base().find(nombre_tabla) != this->base().end()) {
+        return this->base().at(nombre_tabla);
+    }else{
+        return Tabla({},{},{});
+    }
 }
 
 bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
@@ -36,14 +42,17 @@ bool BaseDatos::puedo_agregar_registro(string name_table, Registro r) {
         return false;
     } else {
         vector<string> campos = r.campos();
-        for (int i = 0; i < campos.size(); ++i) {
-            string campo_seleccionado = campos[i];
-            if (!(((r.dato(campo_seleccionado).esNat() && r.dato(campo_seleccionado).valorNat())) ||
-                  (r.dato(campo_seleccionado).esString() && (r.dato(campo_seleccionado).valorStr() != "")))) {
-                return false;
+        Tabla tabla_a_agregar = this->devoler_tabla(name_table);
+        if(r.campos() == tabla_a_agregar.campos()){
+            for (int i = 0; i < r.campos().size() ; ++i) {
+                if(r.dato(r.campos()[i]).esString() !=  tabla_a_agregar.tipoCampo(r.campos()[i]).esString()){
+                    return false;
+                }
             }
+            return true;
+        }else{
+            return false;
         }
-        return true;
 
     }
 }

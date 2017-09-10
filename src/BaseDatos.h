@@ -16,7 +16,7 @@ public:
      * @generador
      */
     BaseDatos(vector<string> nombre_tablas, vector<Tabla> tabla);
-
+    BaseDatos();
     /*
      * @generador
      */

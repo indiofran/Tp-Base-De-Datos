@@ -30,24 +30,38 @@ TEST(Base_test, crear) {
     Registro({}, {});
 };
 TEST_F(BasedatosTests, nueva){
-    string tabla_nombres[] = {"Alumnos"};
-    vector <string> tablas_nombre(tabla_nombres, tabla_nombres + sizeof(tabla_nombres) / sizeof(string));
-    Tabla array_tablas[]= {alumnos};
-    vector <Tabla> tablas(array_tablas,array_tablas + sizeof(array_tablas) / sizeof(Tabla));
+    vector <string> tablas_nombre;
+    tablas_nombre.push_back("Alumnos");
+    vector <Tabla> tablas;
+    tablas.push_back(alumnos);
     BaseDatos universidad(tablas_nombre,tablas);
-    universidad.agregar_tabla("carreras", carreras);
-    Registro nuevo_registro({"Nombre", "LU"}, {datoStr("March"), datoStr("64/9")});
-    alumnos.agregarRegistro(nuevo_registro);
-    universidad.agregar_registro("Alumnos",nuevo_registro);
     EXPECT_EQ(universidad.devoler_tabla("Alumnos"),alumnos);
 }
-//TEST_F(BasedatosTests, Argregar_registro){
-//    string tabla_nombres[] = {"Alumnos"};
-//    vector <string> tablas_nombre(tabla_nombres, tabla_nombres + sizeof(tabla_nombres) / sizeof(string));
-//    Tabla array_tablas[]= {alumnos};
-//    vector <Tabla> tablas(array_tablas,array_tablas + sizeof(array_tablas) / sizeof(Tabla));
-//    BaseDatos universidad(tablas_nombre,tablas);
-//    universidad.agregar_registro("Alumnos",Registro({"Nombre", "LU"}, {datoStr("March"), datoStr("64/9")}));
-//    EXPECT_EQ(universidad.devoler_tabla("Alumnos"),alumnos);
+TEST_F(BasedatosTests, Argregar_tabla){
+    BaseDatos universidad;
+    universidad.agregar_tabla("carreras", carreras);
+    EXPECT_EQ(universidad.devoler_tabla("carreras"),carreras);
+}
+TEST_F(BasedatosTests, Argregar_registro_no_puedo){
+    BaseDatos universidad;
+    universidad.agregar_tabla("carreras", carreras);
+    universidad.agregar_registro("Alumnos",Registro({"LU", "Mes", "Nombre", "Carrera"}, {datoNat(182), datoNat(12), datoStr("March"), datoStr("Computacion")}));
+    EXPECT_EQ(universidad.devoler_tabla("carreras"),carreras);
+    universidad.agregar_registro("carreras",Registro({"LU", "Mes", "Nombre", "Carrera"}, {datoNat(182), datoNat(12), datoStr("March"), datoStr("Computacion")}));
+    EXPECT_EQ(universidad.devoler_tabla("carreras"),carreras);
+}
+TEST_F(BasedatosTests, Argregar_registro_puedo){
+    BaseDatos universidad;
+    universidad.agregar_tabla("Alumnos", alumnos);
+    Registro r({"LU", "Año", "Nombre", "Carrera"}, {datoNat(182), datoNat(12), datoStr("March"), datoStr("Computacion")});
+    universidad.agregar_registro("Alumnos",r);
+    alumnos.agregarRegistro(r);
+    EXPECT_EQ(universidad.devoler_tabla("Alumnos"),alumnos);
+}
+//TEST_F(BasedatosTests, Busqueda){
+//    BaseDatos universidad;
+//    universidad.agregar_tabla("carreras", carreras);
+//    universidad.agregar_registro("Alumnos",Registro({"LU", "Año", "Nombre", "Carrera"}, {datoNat(182), datoNat(12), datoStr("March"), datoStr("Computacion")}));
+//    EXPECT_EQ(universidad.devoler_tabla("carreras"),carreras);
 //}
 

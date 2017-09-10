@@ -78,7 +78,7 @@ Tabla BaseDatos::busqueda(string nombre_tabla, Criterio criterio) {
 bool BaseDatos::hay_registro_repetidos(Tabla tabla, Registro registro){
     vector<string> claves = tabla.claves();
     for (int i = 0; i < claves.size(); ++i) {
-            string clave = claves[i];
+        string clave = claves[i];
         vector<Registro> registros = tabla.registros();
         for (int j = 0; j < registros.size(); ++j) {
             if(registros[j].dato(clave) == registro.dato(clave)){
@@ -96,11 +96,12 @@ bool BaseDatos::criterio_valido(string nombre_tabla, Criterio criterio){
     for(int i = 0;(i < criterio.size()) && res;i++){
         res = false;
         for(int j = 0; (j < tabla_a_comparar.campos().size()) && !res; j++) {
-            if (criterio[i].get_campo() == tabla_a_comparar.campos()[j] && criterio[i].get_valor() == tabla_a_comparar.tipoCampo(criterio[i].get_campo())){
-                res = true;
+            if (criterio[i].get_campo() == tabla_a_comparar.campos()[j]){
+                if (criterio[i].get_valor().esNat() == tabla_a_comparar.tipoCampo(criterio[i].get_campo()).esNat()){
+                    res = true;
+                }
             }
         }
-
     }
     return res;
 };

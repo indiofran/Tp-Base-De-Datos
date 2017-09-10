@@ -149,5 +149,6 @@ TEST_F(BasedatosTests, Busqueda){
     EXPECT_EQ(universidad.busqueda("Alumnos", nada),vacia);
     nada.push_back(buscar_ciro);
     EXPECT_EQ(universidad.busqueda("Alumnos", nada),vacia);
-    EXPECT_EQ(universidad.criterio_mas_utilizado(),2);
+    universidad.busqueda("Alumnos", nada);
+    EXPECT_EQ(universidad.criterio_mas_utilizado(), nada);
 }

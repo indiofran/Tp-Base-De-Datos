@@ -143,7 +143,7 @@ void BaseDatos::agregar_criterio_utilizado(Criterio criterio){
     if(existe_criterio_pos.first){
         this->criterios_utilizados[existe_criterio_pos.second].second++;
     }else{
-        this->criterios_utilizados.emplace_back(make_pair(criterio,1));
+        this->criterios_utilizados.push_back(make_pair(criterio,1));
     }
 }
 pair <bool,int> BaseDatos::tiene_criterio(Criterio criterio){
@@ -156,7 +156,7 @@ pair <bool,int> BaseDatos::tiene_criterio(Criterio criterio){
     return make_pair(false, -1);
 }
 
-int BaseDatos::criterio_mas_utilizado(){
+Criterio BaseDatos::criterio_mas_utilizado(){
     vector<pair<Criterio,int>> criterios_utilizados = this->criterios_utilizados;
     pair<Criterio, int> criterio_mas_utilizado;
     for (int i = 0; i < criterios_utilizados.size() ; ++i) {
@@ -164,7 +164,7 @@ int BaseDatos::criterio_mas_utilizado(){
             criterio_mas_utilizado = criterios_utilizados[i];
         }
     }
-    return criterio_mas_utilizado.second;
+    return criterio_mas_utilizado.first;
 };
 
 

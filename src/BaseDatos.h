@@ -47,7 +47,7 @@ public:
 
     bool criterio_valido(string nombre_tabla, Criterio criterio);
 
-    int criterio_mas_utilizado();
+    Criterio criterio_mas_utilizado();
 
 
 

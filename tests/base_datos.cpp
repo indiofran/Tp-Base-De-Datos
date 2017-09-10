@@ -22,11 +22,11 @@ protected:
 TEST(Base_test, crear) {
     Tabla alumnos({ "LU", "Año", "Nombre", "Carrera" },
             {"LU", "Año"},
-            {datoNat(0), datoNat(0), datoStr(""), datoStr("")});
+            {datoStr(""), datoNat(0), datoStr(""), datoStr("")});
     Tabla carreras({ "Cod", "Carrera" },
              {"Cod"},
              {datoNat(0), datoStr("")});
-    Registro({"LU", "Año", "Nombre", "Carrera"}, {datoNat(182), datoNat(18), datoStr("March"), datoStr("Computacion")});
+    Registro({"LU", "Año", "Nombre", "Carrera"}, {datoStr("45/6"), datoNat(18), datoStr("March"), datoStr("Computacion")});
     Registro({}, {});
 };
 TEST_F(BasedatosTests, nueva){
@@ -65,3 +65,48 @@ TEST_F(BasedatosTests, Argregar_registro_puedo){
 //    EXPECT_EQ(universidad.devoler_tabla("carreras"),carreras);
 //}
 
+TEST_F(BasedatosTests, criterio_valido) {
+    vector<string> tablas_nombres;
+    tablas_nombres.push_back("Alumnos");
+    vector<Tabla> tablas;
+    Tabla alumnos({"Nombre", "LU", "Ano"},
+                  {"LU"},
+                  {datoStr(""), datoStr (""), datoNat(0)});
+    tablas.push_back(alumnos);
+    BaseDatos universidad(tablas_nombres, tablas);
+    Registro nuevo_registro1({"Nombre", "LU", "Ano"}, {datoStr("March"), datoStr("64/9"), datoStr("2017")});
+    Registro nuevo_registro2({"Nombre", "LU", "Ano"}, {datoStr("Ciro"), datoStr("45/16"), datoStr("2017")});
+    Registro nuevo_registro3({"Nombre", "LU", "Ano"}, {datoStr("Fran"), datoStr("76/15"), datoStr("2017")});
+    Registro nuevo_registro4({"Nombre", "LU", "Ano"}, {datoStr("Pepe"), datoStr("89/16"), datoStr("2017")});
+    universidad.agregar_registro("Alumnos",nuevo_registro1);
+    universidad.agregar_registro("Alumnos",nuevo_registro2);
+    universidad.agregar_registro("Alumnos",nuevo_registro3);
+    universidad.agregar_registro("Alumnos",nuevo_registro4);
+    Restricciones buscar_ciro ({"Nombre"},datoStr("Ciro"),false);
+    Criterio criterio_valido;
+    criterio_valido.push_back(buscar_ciro);
+    EXPECT_EQ(universidad.criterio_valido("Alumnos", criterio_valido),true);
+    }
+
+TEST_F(BasedatosTests, criterio_no_valido) {
+    vector<string> tablas_nombres;
+    tablas_nombres.push_back("Alumnos");
+    vector<Tabla> tablas;
+    Tabla alumnos({"Nombre", "LU", "Ano"},
+                  {"LU"},
+                  {datoStr(""), datoStr (""), datoNat(0)});
+    tablas.push_back(alumnos);
+    BaseDatos universidad(tablas_nombres, tablas);
+    Registro nuevo_registro1({"Nombre", "LU", "Ano"}, {datoStr("March"), datoStr("64/9"), datoStr("2017")});
+    Registro nuevo_registro2({"Nombre", "LU", "Ano"}, {datoStr("Ciro"), datoStr("45/16"), datoStr("2017")});
+    Registro nuevo_registro3({"Nombre", "LU", "Ano"}, {datoStr("Fran"), datoStr("76/15"), datoStr("2017")});
+    Registro nuevo_registro4({"Nombre", "LU", "Ano"}, {datoStr("Pepe"), datoStr("89/16"), datoStr("2017")});
+    universidad.agregar_registro("Alumnos",nuevo_registro1);
+    universidad.agregar_registro("Alumnos",nuevo_registro2);
+    universidad.agregar_registro("Alumnos",nuevo_registro3);
+    universidad.agregar_registro("Alumnos",nuevo_registro4);
+    Restricciones buscar_ciro ({"Nombre"},datoNat(0),false);
+    Criterio criterio_valido;
+    criterio_valido.push_back(buscar_ciro);
+    EXPECT_EQ(universidad.criterio_valido("Alumnos", criterio_valido),false);
+}

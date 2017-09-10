@@ -169,3 +169,8 @@ TEST_F(BasedatosTests, BasesDistintas){
     EXPECT_FALSE(base1==base2);
 }
 
+TEST_F(BasedatosTests, BasesVacias){
+    BaseDatos base1;
+    BaseDatos base2;
+    EXPECT_TRUE(base1 == base2);
+}
